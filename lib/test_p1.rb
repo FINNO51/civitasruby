@@ -1,17 +1,21 @@
+# encoding:utf-8
 require_relative "civitas.rb"
 
 include Civitas
-module Civitas
 class TestP1
+  
   def initialize
     
   end
   
   
   def self.main()
+    
+    
+    #1. Llamada a quien_empieza() 100 veces
+    puts "[1]Prueba de metodo quien_empieza()----"
+    
     list = Array.new(4)
-    #_dado = Dado.instance
-
     
     for i in 0..3
       list[i] = 0
@@ -35,8 +39,11 @@ class TestP1
     for k in 0..3
       puts list[k]
     end
+    puts "---------------------------------------"
     
-    # Los valores pseudoaleatorios estan correctamente distribuidos
+    
+    #2. Prueba del modo debug
+    puts "[2] Prueba del modo debug -------------"
     
     Dado.instance.debug = true
     
@@ -49,13 +56,34 @@ class TestP1
     for i in 0..5
       puts Dado.instance.tirar()
     end
+    puts "---------------------------------------"
     
-    # El modo debug funciona correctamente
+    
+    #3. Prueba de ultimo_resultado y salgo_de_la_carcel
+    puts "[3] Prueba de otros metodos de dado----"
     
     puts Dado.instance.ultimo_resultado()
     puts Dado.instance.salgo_de_la_carcel()
     
-    #Ambos metodos funcionan
+    puts "---------------------------------------"
+    
+    #4. Mostrar un tipo de cada enumerado
+    puts "[4] Mostrar enumerados-----------------"
+    
+    include Operaciones_juego
+    include Tipo_casilla
+    include Tipo_sorpresa
+    
+    puts AVANZAR
+    puts CALLE
+    puts IR_CARCEL
+    
+    puts "---------------------------------------"
+   
+    
+    #5. Crear un MazoSorpresas y hacer las pruebas especificadas
+    puts "[5]Prueba de MazoSorpresas-------------"
+    
     s1 = "Sorpresa 1"
     s2 = "Sorpresa 2"
     mazo = MazoSorpresas.new()
@@ -79,24 +107,36 @@ class TestP1
     
     #La clase Diario funciona correctamete
     
+    puts "---------------------------------------"
+    
+    #6. Prueba clase tablero
+    puts "[6] Prueba clase tablero---------------"
+    
     tab = Tablero.new(10)
     puts tab.casillas.length()
-    puts tab.por_salida()
-    tab.aniade_casilla(Casilla.new("Prueba"))
+    puts tab.get_por_salida()
+    tab.añade_casilla(Casilla.new("Prueba"))
     puts tab.casillas.length()
     
-    puts "juez:"
-    puts tab.tiene_juez()
-    tab.aniade_juez()
-    puts tab.tiene_juez()
+    if tab.casilla(5) == nil then
+      puts "Valor nulo al intentar acceder a casilla inexistente"
+    end
     
+    for i in 0..17
+      tab.añade_casilla(Casilla.new("Prueba"))
+    end
+    puts tab.casillas.length()
     
+    puts tab.calcular_tirada(3,15)
+    puts tab.calcular_tirada(15,4)
+    puts tab.nueva_posicion(18, Dado.instance.tirar())
     
+    tab_erroneo = Tablero.new(10)
+    puts tab_erroneo.nueva_posicion(0, 5)
     
+    puts "---------------------------------------"
     
   end
 end
   
-  TestP1.main()
-  
-end
+TestP1.main() 

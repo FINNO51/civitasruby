@@ -1,3 +1,5 @@
+# encoding:utf-8
+
 module Civitas
   
  class Tablero
@@ -26,7 +28,7 @@ module Civitas
     return b
   end
   
-  def correcto(num_casilla)
+  def _correcto(num_casilla)
     
     if correcto() and num_casilla < @casillas.length() then
       b = true
@@ -43,7 +45,7 @@ module Civitas
   attr_reader :casillas #creado para probar la clase
   attr_reader :tiene_juez #idem
   
-  def por_salida()
+  def get_por_salida()
     
     n = @por_salida
     
@@ -54,7 +56,7 @@ module Civitas
     return n
   end
   
-  def aniade_casilla(nueva_casilla)
+  def añade_casilla(nueva_casilla)
     
     if @num_casillas_carcel == @casillas.length() then
       @casillas.push(casilla.new("Carcel"))
@@ -67,7 +69,7 @@ module Civitas
     end
   end
   
-  def aniade_juez()
+  def añade_juez()
     
     if !@tiene_juez then
       @casillas.push(Casilla.new("Juez"))
@@ -77,9 +79,9 @@ module Civitas
   
   def casilla(n)
 
-    s_casilla = null
+    s_casilla = nil
     
-    if correcto(n) then
+    if _correcto(n) then
       s_casilla = @casillas[n]
     end
     
@@ -99,6 +101,8 @@ module Civitas
         @por_salida += 1
       end
     end
+    
+    return n
   end
   
   def calcular_tirada(origen, destino)
