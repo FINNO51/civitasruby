@@ -32,8 +32,8 @@ module Civitas
     
     def salgo_de_la_carcel()
       
-      salir = false
       tirada = tirar()
+      salir = false
       
       if tirada == @@salida_carcel then
         salir = true
@@ -44,10 +44,14 @@ module Civitas
     
     def debug(deb)
       
-      @debug = deb
+      if (deb) then
+        Diario.instance.ocurre_evento("Modo debug activado")
+        @debug = true
       
-      Diario.instance.ocurre_evento("Modo debug activado")
-      
+      else
+        Diario.instance.ocurre_evento("Modo debug desactivado")
+        @debug = fasle
+      end
     end
     
     def quien_empieza(n)

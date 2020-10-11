@@ -41,15 +41,16 @@ module Civitas
      end
    end
    
-   def sorpresa_siguiente()
+   def siguiente()
      
-     if (!@barajada or (@usadas == @sorpresas.length())) and !@debug
+     if ((!@barajada or (@usadas == @sorpresas.length())) and !@debug) then
+       @sorpresas.shuffle()
        @usadas = 0
        @barajada = true
        
      end
-     
      @usadas += 1
+     
    end
    
    def inhabilitar_carta_especial(sorpresa)
@@ -73,7 +74,6 @@ module Civitas
        
        Diario.instance.ocurre_evento("Carta inhabilitada")
      end
-     
      
    end
 

@@ -8,5 +8,6 @@ module Civitas
   require_relative "operaciones_juego.rb"
   require_relative "tipo_casilla.rb"
   require_relative "tipo_sorpresa.rb"
+  require_relative "sorpresa.rb"
     
 end
