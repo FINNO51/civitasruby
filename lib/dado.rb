@@ -10,7 +10,7 @@ module Civitas
       @ultimo_resultado
       @debug = false
       
-      @@salida_carcel = 5
+      @@SALIDA_CARCEL = 5
     end
     
     public
