@@ -37,30 +37,30 @@ module Civitas
       if jugador_correcto(actual, todos) then
         informe(actual, todos)
         case @tipo
-        when IRACASILLA
+        when IR_CASILLA
           aplicar_a_jugador_ir_a_casilla(actual, todos)
-        when IRACARCEL
+        when IR_CARCEL
           aplicar_a_jugador_ir_carcel(actual, todos)
-        when PAGARCOBRAR
+        when PAGAR_COBRAR
           aplicar_a_jugador_pagar_cobrar(actual, todos)
-        when PORCASAHOTEL
+        when POR_CASA_HOTEL
           aplicar_a_jugador_por_casa_hotel(actual, todos)
-        when PORJUGADOR
+        when POR_JUGADOR
           aplicar_a_jugador_por_jugador(actual, todos)
-        when SALIRCARCEL
+        when SALIR_CARCEL
           aplicar_a_jugador_salir_carcel(actual, todos)
         end
       end
     end
     
     def salir_del_mazo()
-      if @tipo == SALIRCARCEL
+      if @tipo == SALIR_CARCEL
         then @mazo.inhabilitar_carta_especial(self)
       end
     end
     
     def usada()
-      if @tipo == SALIRCARCEL
+      if @tipo == SALIR_CARCEL
         then @mazo.habilitar_carta_especial(self)
       end
     end

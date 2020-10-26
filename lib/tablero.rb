@@ -12,7 +12,7 @@ module Civitas
     end 
      
     @casillas = Array.new
-    @casillas.push(Casilla.new("Salida"))
+    @casillas.push(Casilla.new_casilla_descanso("Salida"))
     @por_salida = 0
     @tiene_juez = false
   end

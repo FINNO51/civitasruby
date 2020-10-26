@@ -96,11 +96,39 @@ module Civitas
     end
     
     def inicializar_mazo_sorpresas(tablero)
-      
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_carcel(IR_CARCEL, tablero))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, tablero.num_casilla_carcel, "Ir a la casilla de cárcel."))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, 0, "Ir a la salida"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, 15, "Ir al parking"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_salir_carcel(SALIR_CARCEL, @mazo))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(PAGAR_COBRAR, -200, "Pagas 200"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(PAGAR_COBRAR, 200, "Cobras 200"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_CASA_HOTEL, -200, "Pagas por propiedades"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_CASA_HOTEL, 200, "Cobras por propiedades"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_JUGADOR, -200, "Pagas al resto de jugadores"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_JUGADOR, 200, "Cobras del resto de jugadores"))
     end
     
     def inicializar_tablero(mazo)
-      
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle1", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_sorpresa(mazo, "Sorpresa1"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle2", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle3", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_impuesto(200, "Impuesto"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle4", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle5", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_sorpresa(mazo, "Sorpresa2"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle6", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle7", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_sorpresa(mazo, "Sorpresa3"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle8", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_descanso("Parking"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle9", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle10", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_juez(@tablero.num_casilla_carcel, "Juez"))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle11", 10, 10, 10, 10, 10)))
+      @tablero.añade_casilla(Casilla.new_casilla_calle(Titulo_propiedad.new("Calle12", 10, 10, 10, 10, 10)))
+
     end
     
     def pasar_turno()
