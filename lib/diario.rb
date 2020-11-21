@@ -16,8 +16,7 @@ module Civitas
     end
 
     def leer_evento
-      e = @eventos.shift
-      return e
+      return @eventos.shift
     end
 
   end

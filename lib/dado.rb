@@ -35,7 +35,7 @@ module Civitas
       tirada = tirar()
       salir = false
       
-      if tirada == @@salida_carcel then
+      if tirada == @@SALIDA_CARCEL then
         salir = true
       end
       

@@ -14,7 +14,7 @@ module Civitas
       case estado
 
       when Estados_juego::INICIO_TURNO
-        if (jugador.encarcelado)
+        if (jugador.is_encarcelado)
           op = Operaciones_juego::SALIR_CARCEL
         else
           op = Operaciones_juego::AVANZAR
@@ -24,7 +24,7 @@ module Civitas
         op = Operaciones_juego::PASAR_TURNO
 
       when Estados_juego::DESPUES_AVANZAR
-        if (jugador.encarcelado)
+        if (jugador.is_encarcelado)
           op = Operaciones_juego::PASAR_TURNO
         else
           if (jugador.puede_comprar)

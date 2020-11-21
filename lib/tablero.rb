@@ -58,14 +58,14 @@ module Civitas
   
   def añade_casilla(nueva_casilla)
     
-    if @num_casillas_carcel == @casillas.length() then
-      @casillas.push(casilla.new("Carcel"))
+    if @num_casilla_carcel == @casillas.length() then
+      @casillas.push(Casilla.new_casilla_descanso("CARCEL"))
     end
     
     @casillas.push(nueva_casilla)
     
-    if @num_casillas_carcel == @casillas.length() then
-      @casillas.push(casilla.new("Carcel"))
+    if @num_casilla_carcel == @casillas.length() then
+      @casillas.push(Casilla.new_casilla_descanso("Carcel"))
     end
   end
   

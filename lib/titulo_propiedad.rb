@@ -9,6 +9,8 @@ module Civitas
     attr_reader :precio_compra
     attr_reader :precio_edificar
     attr_reader :propietario
+    attr_reader :num_casas
+    attr_reader :num_hoteles
     
     def initialize(nombre, alquiler, revalorizacion, hipoteca, compra, edificar)
 
@@ -16,10 +18,10 @@ module Civitas
       @alquiler_base = alquiler
       @factor_revalorizacion = revalorizacion
       @hipoteca_base = hipoteca
-      @hipotecado
+      @hipotecado = false
       @nombre = nombre
-      @num_casas
-      @num_hoteles
+      @num_casas = 0
+      @num_hoteles = 0
       @precio_compra = compra
       @precio_edificar = edificar
       @propietario = nil
@@ -30,8 +32,18 @@ module Civitas
       @propietario = jugador
     end
     
-    def cancelar_hipoteca()
+    def cancelar_hipoteca(jugador)
       
+      result = false
+      
+      if hipotecado and es_este_el_propietario(jugador) then
+        
+        jugador.paga(importe_cancelar_hipoteca())
+        @hipotecado = false
+        result = true
+      end
+      
+      return result
     end
     
     def cantidad_casas_hoteles()
@@ -40,14 +52,45 @@ module Civitas
     
     def comprar(jugador)
       
+      result = false
+      
+      if !tiene_propietario() then
+        
+        result = true
+        jugador.paga(@precio_compra)
+        actualizar_propietario_por_conversion(jugador)
+      end
+      
+      return result
     end
     
     def construir_casa(jugador)
+      
+      result = false
+      
+      if es_este_el_propietario(jugador) then
+        
+        jugador.paga(precio_edificar)
+        @num_casas += 1
+        result = true
+      end
+      
+      return result
       
     end
     
     def construir_hotel(jugador)
       
+      result = false
+      
+      if es_este_el_propietario(jugador) then
+        
+        jugador.paga(precio_edificar)
+        @num_hoteles += 1
+        result = true
+      end
+      
+      return result
     end
     
     def derruir_casas(n, jugador)
@@ -65,6 +108,16 @@ module Civitas
     
     def hipotecar(jugador)
       
+      salida = false
+      
+      if !hipotecado and es_este_el_propietario(jugador) then
+        
+        propietario.recibe(importe_hipoteca())
+        @hipotecado = true
+        salida = true
+      end
+      
+      return salida
     end
     
     def tiene_propietario()
@@ -72,9 +125,11 @@ module Civitas
     end
     
     def tramitar_alquiler(jugador)
-      if @propietario != jugador && @propietario != nil
-        then jugador.paga_alquiler(@precio_alquiler)
-        @propietario.recibe(@precio_alquiler)
+      if tiene_propietario() && !es_este_el_propietario(jugador) then 
+        
+        precio = precio_alquiler()
+        jugador.paga_alquiler(precio)
+        @propietario.recibe(precio)
       end
     end
     
@@ -93,7 +148,8 @@ module Civitas
     private
     
     def es_este_el_propietario(jugador)
-      @propietario == jugador
+      
+      return @propietario == jugador
     end
     
     def importe_hipoteca()
@@ -103,7 +159,8 @@ module Civitas
     def precio_alquiler()
       precio = 0
       if !propietario_encarcelado() && !hipotecado
-        then precio = @alquiler_base*(1+(@num_casas*0.5)+(@num_hoteles*2.5)) end
+        then precio = @alquiler_base*(1+(@num_casas*0.5)+(@num_hoteles*2.5)) 
+      end
       return precio
     end
     
@@ -113,27 +170,27 @@ module Civitas
     
     def propietario_encarcelado()
       encarcelado = true
-      if !propietario.encarcelado || propietario == nil
-        then encarcelado = false end
+      if !@propietario.is_encarcelado || @propietario == nil
+        then encarcelado = false 
+      end
     end
     
     public
     
     def hipotecado()
-      @hipotecado
+      return @hipotecado
     end
     
     def to_string()
-      puts "Alquiler base: #{@alquiler_base}\n
-      Factor intereses hipoteca: #{@@factor_intereses_hipoteca}\n
-      Factor revalorización: #{@factor_revalorizacion}\n
-      Hipoteca base: #{@hipoteca_base}\n
-      Hipotecado: #{@hipotecado}\n
-      Nombre: #{@nombre}\n
-      Número casas: #{@num_casas}\n
-      Número hoteles: #{@num_hoteles}\n
-      Precio compra: #{@precio_compra}\n
-      Precio edificar: #{@precio_edificar}\n
+      puts "      Alquiler base: #{@alquiler_base}
+      Factor intereses hipoteca: #{@@factor_intereses_hipoteca}
+      Factor revalorización: #{@factor_revalorizacion}
+      Hipoteca base: #{@hipoteca_base}
+      Hipotecado: #{@hipotecado}
+      Número casas: #{@num_casas}
+      Número hoteles: #{@num_hoteles}
+      Precio compra: #{@precio_compra}
+      Precio edificar: #{@precio_edificar}
       Propietario: #{@propietario}\n"
     end
   end

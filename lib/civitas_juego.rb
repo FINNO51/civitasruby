@@ -7,25 +7,31 @@ module Civitas
     
     def initialize(nombres)
       @jugadores = Array.new
-      i = 0
-      nombres.length.times {
-        @jugadores[i] = Jugador.new_jugador(nombres[i])
-        i += 1
-        }
       
-      @indice_jugador_actual = Dado.instance.quien_empieza(@jugadores.length)
-      @mazo
-      @tablero = Tablero.new(n)
+      for i in 0..nombres.length-1
+        j = Jugador.new
+        j.new_jugador(nombres[i])
+        @jugadores.push(j)
+      end
+        
+      
+      @indice_jugador_actual = Dado.instance.quien_empieza(@jugadores.length())
+      @mazo = Mazo_sorpresas.new
+      @tablero = Tablero.new(10)
+      @gestor_estados = Gestor_estados.new()
       @estado = @gestor_estados.estado_inicial
-      @gestor_estados
+      
+      inicializar_tablero(@mazo)
+      inicializar_mazo_sorpresas(@tablero)
     end
     
     def cancelar_hipoteca(ip)
       jugador_actual().cancelar_hipoteca(ip)
     end
     
-    def comprar()
+    def comprar(titulo)
       
+      return jugador_actual().comprar(titulo)
     end
     
     def construir_casa(ip)
@@ -36,7 +42,7 @@ module Civitas
       jugador_actual().construir_hotel(ip)
     end
     
-    def final_del_juego(ip)
+    def final_del_juego()
       final = false
       i = 0
       @jugadores.length.times { 
@@ -44,11 +50,11 @@ module Civitas
           then final = true end
         i += 1
       }
-      final
+      return final
     end
     
     def casilla_actual()
-      jugador_actual().num_casilla_actual
+      return @tablero.casilla(jugador_actual().num_casilla_actual)
     end
     
     def jugador_actual()
@@ -72,11 +78,26 @@ module Civitas
     end
     
     def siguiente_paso()
-     
+
+      operacion = @gestor_estados.operaciones_permitidas(jugador_actual(), @estado)
+      
+      if operacion == Operaciones_juego::PASAR_TURNO then
+        
+        pasar_turno()
+        siguiente_paso_completado(operacion)
+        
+      elsif operacion == Operaciones_juego::AVANZAR then
+        
+        avanza_jugador()
+        siguiente_paso_completado(operacion)
+        
+      end
+      
+      return operacion
     end
     
     def siguiente_paso_completado(operacion)
-      @gestor_estados.siguiente_estado(@jugadores[@indice_jugador_actual], @estado, operacion)
+      @estado = @gestor_estados.siguiente_estado(jugador_actual(), @estado, operacion)
     end
     
     def vender(ip)
@@ -86,6 +107,18 @@ module Civitas
     private
     
     def avanza_jugador()
+      tirada = Dado.instance.tirar()
+      Diario.instance.ocurre_evento("El dado ha sacado: #{tirada}")
+      nueva_pos = @tablero.nueva_posicion(jugador_actual().num_casilla_actual, tirada)
+      nueva_casilla = @tablero.casilla(nueva_pos)
+      
+      contabilizar_pasos_por_salida(jugador_actual())
+      
+      jugador_actual().mover_a_casilla(nueva_pos)
+      
+      nueva_casilla.recibe_jugador(@indice_jugador_actual, @jugadores)
+      
+      contabilizar_pasos_por_salida(jugador_actual())
       
     end
     
@@ -96,17 +129,17 @@ module Civitas
     end
     
     def inicializar_mazo_sorpresas(tablero)
-      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_carcel(IR_CARCEL, tablero))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, tablero.num_casilla_carcel, "Ir a la casilla de cárcel."))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, 0, "Ir a la salida"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(IR_CASILLA, tablero, 15, "Ir al parking"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_salir_carcel(SALIR_CARCEL, @mazo))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(PAGAR_COBRAR, -200, "Pagas 200"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(PAGAR_COBRAR, 200, "Cobras 200"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_CASA_HOTEL, -200, "Pagas por propiedades"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_CASA_HOTEL, 200, "Cobras por propiedades"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_JUGADOR, -200, "Pagas al resto de jugadores"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(POR_JUGADOR, 200, "Cobras del resto de jugadores"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_carcel(Tipo_sorpresa::IR_CARCEL, tablero))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(Tipo_sorpresa::IR_CASILLA, tablero, tablero.num_casilla_carcel, "Ir a la casilla de cárcel."))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(Tipo_sorpresa::IR_CASILLA, tablero, 0, "Ir a la salida"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_ir_a_casilla(Tipo_sorpresa::IR_CASILLA, tablero, 15, "Ir al parking"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_salir_carcel(Tipo_sorpresa::SALIR_CARCEL, @mazo))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::PAGAR_COBRAR, -200, "Pagas 200"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::PAGAR_COBRAR, 200, "Cobras 200"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::POR_CASA_HOTEL, -200, "Pagas por propiedades"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::POR_CASA_HOTEL, 200, "Cobras por propiedades"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::POR_JUGADOR, -200, "Pagas al resto de jugadores"))
+      @mazo.al_mazo(Sorpresa.new_sorpresa_otras(Tipo_sorpresa::POR_JUGADOR, 200, "Cobras del resto de jugadores"))
     end
     
     def inicializar_tablero(mazo)
@@ -132,9 +165,7 @@ module Civitas
     end
     
     def pasar_turno()
-      @indice_jugador_actual += 1
-      if @indice_jugador_actual == @jugadores.length
-        then @indice_jugador_actual = 0 end
+      @indice_jugador_actual = (@indice_jugador_actual+1)%@jugadores.length
     end
     
     def ranking()

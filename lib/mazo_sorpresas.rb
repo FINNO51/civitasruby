@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 module Civitas
- class MazoSorpresas
+ class Mazo_sorpresas
    
    
    def initialize (deb = false)
@@ -37,19 +37,37 @@ module Civitas
    def al_mazo(s)
      
      if !@barajada then
-       sorpresas.push(s)       
+       @sorpresas.push(s)       
      end
+   end
+   
+   def to_string()
+     
+     i = 0
+     
+     for i in 0..@sorpresas.length do
+       
+       puts @sorpresas[i].texto
+       i += 1
+     end
+     
    end
    
    def siguiente()
      
-     if ((!@barajada or (@usadas == @sorpresas.length())) and !@debug) then
-       @sorpresas.shuffle()
+     if ((!@barajada || (@usadas == @sorpresas.length())) && !@debug) then
+       #binding.pry
+       @sorpresas = @sorpresas.shuffle()
        @usadas = 0
        @barajada = true
        
      end
      @usadas += 1
+     @ultima_sorpresa = @sorpresas[0]
+     @sorpresas.delete_at(0)
+     @sorpresas.push(@ultima_sorpresa)
+     
+     return @ultima_sorpresa
      
    end
    
@@ -72,7 +90,7 @@ module Civitas
        @cartas_especiales.delete(sorpresa)
        @sorpresas.push(sorpresa)
        
-       Diario.instance.ocurre_evento("Carta inhabilitada")
+       Diario.instance.ocurre_evento("Carta habilitada")
      end
      
    end
