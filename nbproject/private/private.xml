@@ -3,14 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/jugador.rb</file>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/tablero.rb</file>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/test_p1.rb</file>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/tipo_sorpresa.rb</file>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/titulo_propiedad.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa_por_jugador.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa_por_casa_hotel.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa_ir_casilla.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/civitas.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/casilla_sorpresa.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa_salir_carcel.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa_especulador.rb</file>
             <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/civitas_juego.rb</file>
             <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/sorpresa.rb</file>
-            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/dado.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/main.rb</file>
+            <file>file:/home/jordi/Escritorio/PDOO/Practica1/civitasruby/lib/controlador.rb</file>
         </group>
     </open-files>
 </project-private>

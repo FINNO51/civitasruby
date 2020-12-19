@@ -6,6 +6,7 @@ module Civitas
     attr_reader :CASAS_POR_HOTEL
     attr_reader :num_casilla_actual
     attr_reader :puede_comprar
+    attr_reader :salvoconducto
       
     def initialize()
 
@@ -30,6 +31,17 @@ module Civitas
       @nombre = nombre
       @propiedades = Array.new
       @saldo = @@SALDO_INICIAL
+    end
+    
+    def new_jugador_copia(jugador)
+      
+      @nombre = jugador.nombre
+      @num_casilla_actual = jugador.num_casilla_actual
+      @propiedades = jugador.propiedades
+      @puede_comprar = jugador.puede_comprar
+      @saldo = jugador.saldo
+      @salvoconducto = jugador.salvoconducto
+      @encarcelado = jugador.is_encarcelado()
     end
     
     def cancelar_hipoteca(ip)
@@ -217,7 +229,6 @@ module Civitas
     def salir_carcel_pagando()
       sale = is_encarcelado() && puede_salir_carcel_pagando()
       if sale then
-        binding.pry
         paga(@@PRECIO_LIBERTAD)
         @encarcelado = false
         Diario.instance.ocurre_evento("#{@nombre} sale de la cárcel pagando.\n")
@@ -263,10 +274,16 @@ module Civitas
     
     private
     
-    attr_reader :CASAS_MAX
-    attr_reader :HOTELES_MAX
     attr_reader :PRECIO_LIBERTAD
     attr_reader :PASO_POR_SALIDA
+    
+    def get_casas_max()
+      return @@CASAS_MAX
+    end
+    
+    def get_hoteles_max()
+      return @@HOTELES_MAX
+    end
     
     def existe_la_propiedad(ip)
 
@@ -284,13 +301,13 @@ module Civitas
     
     def puedo_edificar_casa(propiedad)
       
-      return puedo_gastar(propiedad.precio_edificar) && propiedad.num_casas < @@CASAS_MAX
+      return puedo_gastar(propiedad.precio_edificar) && propiedad.num_casas < get_casas_max()
       
     end
     
     def puedo_edificar_hotel(propiedad)
       
-      return puedo_gastar(propiedad.precio_edificar) && propiedad.num_casas == 4 && propiedad.num_hoteles < @@HOTELES_MAX
+      return puedo_gastar(propiedad.precio_edificar) && propiedad.num_casas == 4 && propiedad.num_hoteles < get_hoteles_max()
     end
     
     def puedo_gastar(precio)
@@ -307,16 +324,6 @@ module Civitas
     attr_reader :saldo
     
     protected
-     
-    def self.new_jugador_copia(jugador)
-      @nombre = jugador.nombre
-      @num_casilla_actual = jugador.num_casilla_actual
-      @propiedades = jugador.propiedades
-      @puede_comprar = jugador.puede_comprar
-      @saldo = jugador.saldo
-      @salvoconducto = jugador.salvoconducto
-      @encarcelado = jugador.is_encarcelado()
-    end
     
     def debe_ser_encarcelado()
       debe = !is_encarcelado()

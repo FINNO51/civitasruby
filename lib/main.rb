@@ -1,6 +1,5 @@
 # encoding:utf-8
 require_relative 'civitas.rb'
-require 'pry'
 
 include Civitas
 

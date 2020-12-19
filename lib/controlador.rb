@@ -48,7 +48,7 @@ module Civitas
             respuesta = @vista.comprar()
             
             if respuesta == Lista_respuestas[0] then
-              @juego.comprar(@juego.casilla_actual.titulo_propiedad)
+              @juego.comprar()
 
             end
             @juego.siguiente_paso_completado(siguiente_op)
